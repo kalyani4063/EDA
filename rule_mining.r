@@ -1,0 +1,28 @@
+install.packages("arules")
+library(arules)
+data("Groceries")
+summary(Groceries)
+dim(Groceries)
+items <- itemLabels(Groceries)
+items
+install.packages("arulesViz")
+library(arulesViz)
+itemFrequencyPlot(Groceries, topN=10, type="absolute")
+rules <- apriori(Groceries, parameter=list(supp=0.002, conf=0.5))
+summary(rules)
+inspect(head(rules, 5))
+rules_sorted <- sort(rules, by="lift")
+inspect(head(rules_sorted, 5))
+plot(rules)
+plot(rules, method="grouped")
+rice_rules <- apriori(Groceries, parameter = list(support = 0.002, confidence = 0.5), appearance =
+list(lhs = "rice"))
+top_rice <- head(sort(rice_rules, by = "confidence"), 5)
+inspect(top_rice)
+plot(top_rice, method = "scatterplot", measure = c("support", "confidence"), shading = "lift")
+rules_whole_milk <- apriori(Groceries, parameter = list(support = 0.01, confidence = 0.5),
+ appearance = list(rhs = "whole milk"))
+top_whole_milk <- head(sort(rules_whole_milk, by = "confidence"), 5)
+inspect(top_whole_milk)
+plot(top_whole_milk, method = "scatterplot", measure = c("support", "confidence"), shading =
+"lift")
